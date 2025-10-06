@@ -1,10 +1,11 @@
-import { prisma } from "../../../../lib/prisma";
+import { supabase } from "../../../../lib/supabase";
 import { Genre } from "../../../types/book";
 
-
-export async function PATCH(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const id = searchParams.get("id");
+export async function PATCH(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  const { id } = params;
   const body: Partial<Genre> = await request.json();
   const { title, description } = body;
 
@@ -16,16 +17,17 @@ export async function PATCH(request: Request) {
   }
 
   try {
-    const updatedGenre = await prisma.genre.update({
-      where: { id: Number(id) },
-      data: {
-        ...(title && { title }),
-        ...(description && { description }),
-      },
-    });
+    const { data: updatedGenre, error } = await supabase
+      .from("genres")
+      .update({ title, description })
+      .eq("id", id)
+      .select();
+
+    if (error) {
+      throw error;
+    }
 
     return Response.json(updatedGenre, { status: 200 });
-
   } catch (error) {
     return Response.json(
       { error: "Erro ao atualizar gênero." },
@@ -34,10 +36,12 @@ export async function PATCH(request: Request) {
   }
 }
 
-export async function DELETE(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const id = searchParams.get("id");
-  
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  const { id } = params;
+
   if (!id) {
     return Response.json(
       { error: "ID é obrigatório para exclusão." },
@@ -46,9 +50,11 @@ export async function DELETE(request: Request) {
   }
 
   try {
-    await prisma.genre.delete({
-      where: { id: Number(id) },
-    });
+    const { error } = await supabase.from("genres").delete().eq("id", id);
+
+    if (error) {
+      throw error;
+    }
 
     return Response.json(
       { message: "Gênero deletado com sucesso." },

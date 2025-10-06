@@ -1,5 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "../../../../lib/prisma";
+import { supabase } from "../../../../lib/supabase";
+
+// Helper to format book data
+function formatBook(book: any) {
+  if (!book) return null;
+  const genres = book.book_genres ? book.book_genres.map((bg: any) => bg.genres).filter(Boolean) : [];
+  const { book_genres, ...rest } = book;
+  return {
+    ...rest,
+    genres,
+  };
+}
 
 // --- GET ---
 export async function GET(
@@ -13,10 +24,15 @@ export async function GET(
   }
 
   try {
-    const book = await prisma.book.findUnique({
-      where: { id: Number(id) },
-      include: { genres: true },
-    });
+    const { data: book, error } = await supabase
+      .from("books")
+      .select("*, book_genres(*, genres(*)))")
+      .eq("id", id)
+      .single();
+
+    if (error) {
+      throw error;
+    }
 
     if (!book) {
       return NextResponse.json(
@@ -25,7 +41,7 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(book, { status: 200 });
+    return NextResponse.json(formatBook(book), { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { error: "Erro ao buscar livro." },
@@ -67,26 +83,50 @@ export async function PATCH(
 
   try {
     const { genres, genreIds, ...rest } = body;
-    const data: any = { ...rest };
     const bookId = Number(id);
 
-    if (genreIds) {
-      data.genres = {
-        set: genreIds.map((id) => ({ id: Number(id) })),
-      };
-    } else if (genres) {
-      data.genres = {
-        set: genres.map((g) => ({ id: Number(g.id) })),
-      };
+    // Update book details
+    if (Object.keys(rest).length > 0) {
+      const { error: updateError } = await supabase
+        .from("books")
+        .update(rest)
+        .eq("id", bookId);
+
+      if (updateError) {
+        throw updateError;
+      }
     }
 
-    const updatedBook = await prisma.book.update({
-      where: { id: bookId },
-      data,
-      include: { genres: true },
-    });
+    const newGenreIds = genreIds || (genres ? genres.map((g) => g.id) : null);
 
-    return NextResponse.json(updatedBook, { status: 200 });
+    if (newGenreIds) {
+      // Delete existing genre associations
+      await supabase.from("book_genres").delete().eq("book_id", bookId);
+
+      // Insert new genre associations
+      if (newGenreIds.length > 0) {
+        const { error: insertError } = await supabase
+          .from("book_genres")
+          .insert(newGenreIds.map((genre_id) => ({ book_id: bookId, genre_id })));
+
+        if (insertError) {
+          throw insertError;
+        }
+      }
+    }
+
+    // Fetch the updated book with genres
+    const { data: updatedBook, error: fetchError } = await supabase
+      .from("books")
+      .select("*, book_genres(*, genres(*)))")
+      .eq("id", bookId)
+      .single();
+
+    if (fetchError) {
+      throw fetchError;
+    }
+
+    return NextResponse.json(formatBook(updatedBook), { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { error: "Erro ao atualizar livro." },
@@ -110,7 +150,13 @@ export async function DELETE(
   }
 
   try {
-    await prisma.book.delete({ where: { id: Number(id) } });
+    const bookId = Number(id);
+
+    // Delete genre associations first
+    await supabase.from("book_genres").delete().eq("book_id", bookId);
+
+    // Then delete the book
+    await supabase.from("books").delete().eq("id", bookId);
 
     return NextResponse.json(
       { message: "Livro deletado com sucesso." },

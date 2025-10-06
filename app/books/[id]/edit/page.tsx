@@ -54,7 +54,9 @@ export default function EditBookPage() {
       try {
         const bookData = await getBook(id);
         setFormData(bookData);
-        setSelectedGenres(bookData.genres.map((g: Genre) => g.id));
+        if (bookData && bookData.genres) {
+          setSelectedGenres(bookData.genres.map((g: Genre) => g.id));
+        }
       } catch (error) {
         console.error("Erro ao carregar livro:", error);
         router.push("/books");
