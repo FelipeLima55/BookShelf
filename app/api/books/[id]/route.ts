@@ -1,42 +1,40 @@
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "../../../../lib/prisma";
 
+// --- GET ---
 export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
 ) {
-  const id = params.id;
+  const { id } = await context.params;
 
   if (!id) {
-    return Response.json(
-      { error: "ID é obrigatório." },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "ID é obrigatório." }, { status: 400 });
   }
 
   try {
     const book = await prisma.book.findUnique({
       where: { id: Number(id) },
-      include: {
-        genres: true,
-      },
+      include: { genres: true },
     });
 
     if (!book) {
-      return Response.json(
+      return NextResponse.json(
         { error: "Livro não encontrado." },
         { status: 404 }
       );
     }
 
-    return Response.json(book, { status: 200 });
+    return NextResponse.json(book, { status: 200 });
   } catch (error) {
-    return Response.json(
+    return NextResponse.json(
       { error: "Erro ao buscar livro." },
       { status: 500 }
     );
   }
 }
 
+// --- PATCH ---
 type BookUpdateBody = {
   title?: string;
   author?: string;
@@ -54,14 +52,14 @@ type BookUpdateBody = {
 };
 
 export async function PATCH(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
 ) {
-  const id = params.id;
+  const { id } = await context.params;
   const body = (await request.json()) as BookUpdateBody;
 
   if (Object.keys(body).length === 0) {
-    return Response.json(
+    return NextResponse.json(
       { error: "Nenhum campo alterado para atualização." },
       { status: 400 }
     );
@@ -84,44 +82,44 @@ export async function PATCH(
 
     const updatedBook = await prisma.book.update({
       where: { id: bookId },
-      data: data,
-      include: {
-        genres: true,
-      },
+      data,
+      include: { genres: true },
     });
 
-    return Response.json(updatedBook, { status: 200 });
+    return NextResponse.json(updatedBook, { status: 200 });
   } catch (error) {
-    return Response.json(
+    return NextResponse.json(
       { error: "Erro ao atualizar livro." },
       { status: 500 }
     );
   }
 }
 
+// --- DELETE ---
 export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
 ) {
-  const id = params.id;
+  const { id } = await context.params;
 
   if (!id) {
-    return Response.json(
+    return NextResponse.json(
       { error: "ID é obrigatório para exclusão." },
       { status: 400 }
     );
   }
 
   try {
-    await prisma.book.delete({
-      where: { id: Number(id) },
-    });
+    await prisma.book.delete({ where: { id: Number(id) } });
 
-    return Response.json(
+    return NextResponse.json(
       { message: "Livro deletado com sucesso." },
       { status: 200 }
     );
   } catch {
-    return Response.json({ error: "Erro ao deletar livro." }, { status: 500 });
+    return NextResponse.json(
+      { error: "Erro ao deletar livro." },
+      { status: 500 }
+    );
   }
 }
