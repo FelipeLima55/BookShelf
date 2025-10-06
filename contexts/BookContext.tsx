@@ -38,7 +38,7 @@ export const BookProvider = ({ children }: { children: ReactNode }) => {
       setError(null);
     } catch (err) {
       setError("Erro ao carregar livros");
-      console.error("Erro ao carregar livros:", err);
+      console.error("Detailed book loading error:", JSON.stringify(err, null, 2));
     } finally {
       setIsLoading(false);
     }

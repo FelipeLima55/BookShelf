@@ -12,7 +12,7 @@ import Link from "next/link";
 
 export default function Home() {
   const { books, isLoading, error, refreshBooks } = useBooks();
-  const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
+  const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
 
   const handleRefresh = useCallback(async () => {
     await refreshBooks();
@@ -79,9 +79,11 @@ export default function Home() {
             {isLoading ? "Atualizando..." : "Atualizar"}
           </button>
         </div>
-        <p className="text-sm text-gray-500">
-          Última atualização: {lastUpdate.toLocaleTimeString()}
-        </p>
+                {lastUpdate && (
+          <p className="text-sm text-gray-500">
+            Última atualização: {lastUpdate.toLocaleTimeString()}
+          </p>
+        )}
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

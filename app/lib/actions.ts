@@ -130,7 +130,8 @@ export async function getBooks() {
     });
 
     if (!response.ok) {
-        throw new Error('Failed to fetch books');
+        const errorData = await response.json().catch(() => ({ error: 'Failed to parse error response' }));
+        throw new Error(errorData.error || 'Failed to fetch books');
     }
 
     return response.json();

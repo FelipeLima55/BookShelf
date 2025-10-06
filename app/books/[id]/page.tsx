@@ -137,7 +137,15 @@ export default async function BookDetailsPage({ params }: PageProps) {
             <div>
               <h3 className="font-medium text-gray-700">Adicionado em</h3>
               <p className="text-gray-900">
-                {new Date(book.createdAt).toLocaleDateString("pt-BR")}
+                {book.created_at
+                  ? new Date(
+                      book.created_at.replace(" ", "T")
+                    ).toLocaleDateString("pt-BR", {
+                      day: "2-digit",
+                      month: "long",
+                      year: "numeric",
+                    })
+                  : "Data não disponível"}
               </p>
             </div>
           </div>
