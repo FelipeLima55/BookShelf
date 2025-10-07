@@ -9,6 +9,46 @@ const BASE_URL = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
     : 'http://localhost:3000';
 
+    // Server action to create a new book
+export async function addBook(book: Omit<Book, 'id' | 'createdAt'>) {
+    try {
+        if (!book.title || !book.author || !book.status) {
+            throw new Error('Título, autor e status são obrigatórios');
+        }
+
+        const response = await fetch(`${BASE_URL}/api/books`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(book),
+            cache: 'no-store'
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({
+                error: 'Erro na resposta do servidor',
+                details: `Status: ${response.status}`
+            }));
+
+            if (response.status === 400) {
+                throw new Error(errorData.error || 'Dados inválidos fornecidos');
+            } else if (response.status === 500) {
+                throw new Error(errorData.error + (errorData.details ? `: ${errorData.details}` : ''));
+            } else {
+                throw new Error(errorData.error || 'Erro ao adicionar livro');
+            }
+        }
+
+        revalidatePath('/books');
+        const newBook = await response.json();
+        return newBook;
+    } catch (error) {
+        console.error('Error adding book:', error);
+        throw error instanceof Error ? error : new Error('Erro ao adicionar livro');
+    }
+}
+
 // Server action to update a book
 export async function updateBook(id: string, book: Partial<Book>) {
     // Converter genreIds para o formato esperado pela API
