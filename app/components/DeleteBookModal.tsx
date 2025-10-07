@@ -67,8 +67,8 @@ export default function DeleteBookModal({
             Você está prestes a excluir:
           </p>
           <p className="text-lg font-semibold text-gray-800 mt-2">
-            "{bookTitle}"
-          </p>
+  &quot;{bookTitle}&quot;
+</p>
           <p className="text-sm text-gray-500 mt-2">
             Esta ação não pode ser desfeita.
           </p>
