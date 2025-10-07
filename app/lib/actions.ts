@@ -2,8 +2,8 @@
 
 import { revalidatePath } from 'next/cache';
 import { Book } from '@/app/types/book';
+import { supabase } from '@/lib/supabase';
 
-// Teste
 // Função auxiliar para construir URLs absolutas
 function getBaseUrl() {
   if (typeof window !== 'undefined') return '';
@@ -13,7 +13,7 @@ function getBaseUrl() {
 
 const BASE_URL = getBaseUrl();
 
-    // Server action to create a new book
+// Server action to create a new book
 export async function addBook(book: Omit<Book, 'id' | 'createdAt'>) {
     try {
         if (!book.title || !book.author || !book.status) {
@@ -55,7 +55,6 @@ export async function addBook(book: Omit<Book, 'id' | 'createdAt'>) {
 
 // Server action to update a book
 export async function updateBook(id: string, book: Partial<Book>) {
-    // Converter genreIds para o formato esperado pela API
     const payload = { ...book } as Record<string, unknown>;
     if ('genreIds' in payload && Array.isArray(payload.genreIds)) {
         payload.genres = (payload.genreIds as number[]).map((id: number) => ({ id }));
@@ -113,47 +112,104 @@ export async function deleteBook(id: string) {
 
 // Server action to get a book by ID
 export async function getBook(id: string) {
-    const response = await fetch(`${BASE_URL}/api/books/${id}`, {
-        cache: 'no-store'
-    });
+    try {
+        const { data, error } = await supabase
+            .from("books")
+            .select(`
+                *,
+                book_genres(
+                    genre_id,
+                    genres(id, title)
+                )
+            `)
+            .eq("id", Number(id))
+            .single();
 
-    if (!response.ok) {
+        if (error) throw error;
+
+        return {
+            id: data.id,
+            title: data.title,
+            author: data.author,
+            status: data.status,
+            pages: data.pages,
+            totalPages: data.total_pages,
+            currentPage: data.current_page,
+            rating: data.rating,
+            coverUrl: data.cover_url,
+            synopsis: data.synopsis,
+            isbn: data.isbn,
+            notes: data.notes,
+            createdAt: data.created_at,
+            genres: (data.book_genres ?? []).map((bg: any) => ({
+                id: bg.genres?.id,
+                title: bg.genres?.title ?? "",
+            })),
+        };
+    } catch (error) {
+        console.error('Error fetching book:', error);
         throw new Error('Book not found');
     }
-
-    return response.json();
 }
 
 // Server action to get all books
 export async function getBooks() {
-    const response = await fetch(`${BASE_URL}/api/books`, {
-        cache: 'no-store',
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    });
+    try {
+        const { data, error } = await supabase
+            .from("books")
+            .select(`
+                *,
+                book_genres(
+                    genre_id,
+                    genres(id, title)
+                )
+            `)
+            .order("created_at", { ascending: false });
 
-    if (!response.ok) {
+        if (error) throw error;
+
+        const books = (data ?? []).map((book: any) => ({
+            id: book.id,
+            title: book.title,
+            author: book.author,
+            status: book.status,
+            pages: book.pages,
+            totalPages: book.total_pages,
+            currentPage: book.current_page,
+            rating: book.rating,
+            coverUrl: book.cover_url,
+            synopsis: book.synopsis,
+            isbn: book.isbn,
+            notes: book.notes,
+            createdAt: book.created_at,
+            genres: (book.book_genres ?? []).map((bg: any) => ({
+                id: bg.genres?.id,
+                title: bg.genres?.title ?? "",
+            })),
+        }));
+
+        return books;
+    } catch (error) {
+        console.error('Error fetching books:', error);
         throw new Error('Failed to fetch books');
     }
-
-    return response.json();
 }
 
 // Server action to get all genres
 export async function getGenres() {
-    const response = await fetch(`${BASE_URL}/api/genres`, {
-        cache: 'no-store',
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    });
+    try {
+        const { data, error } = await supabase
+            .from("genres")
+            .select("*")
+            .order("title", { ascending: true });
 
-    if (!response.ok) {
+        if (error) throw error;
+
+        return data || [];
+    } catch (error) {
+        console.error('Error fetching genres:', error);
         throw new Error('Failed to fetch genres');
     }
-
-    return response.json();
 }
 
 // Server action to add a new genre
