@@ -3,6 +3,14 @@
 import { useState, useEffect, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { Book } from "@/app/types/book";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"; 
+
 
 interface Genre {
   id: number;
@@ -190,22 +198,32 @@ export default function BookForm({ book, genres }: BookFormProps) {
           </div>
 
           <div>
-            <label htmlFor="status" className="block text-sm font-medium mb-1">
-              Status <span className="text-red-500">*</span>
-            </label>
-            <select
-              id="status"
-              name="status"
-              value={formData.status}
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
-            >
-              <option value="to_read">Para Ler</option>
-              <option value="reading">Lendo</option>
-              <option value="finished">Finalizado</option>
-            </select>
-          </div>
+  <label htmlFor="status" className="block text-sm font-medium mb-1">
+    Status <span className="text-red-500">*</span>
+  </label>
+  <Select
+    name="status"
+    value={formData.status}
+    onValueChange={(value) =>
+      setFormData((prev) => ({ ...prev, status: value }))
+    }
+    required
+  >
+    <SelectTrigger className="w-full">
+      <SelectValue placeholder="Selecione o status" />
+    </SelectTrigger>
+    <SelectContent>
+      <SelectItem value="to_read">Para Ler</SelectItem>
+      <SelectItem value="reading">Lendo</SelectItem>
+      <SelectItem value="finished">Finalizado</SelectItem>
+      {/* Adicione outros status se necessário, como PAUSED, ABANDONED, etc. */}
+      <SelectItem value="read">Lido</SelectItem>
+      <SelectItem value="paused">Pausado</SelectItem>
+      <SelectItem value="abandoned">Abandonado</SelectItem>
+    </SelectContent>
+  </Select>
+</div>
+
 
           <div>
             <label htmlFor="isbn" className="block text-sm font-medium mb-1">
@@ -294,10 +312,11 @@ export default function BookForm({ book, genres }: BookFormProps) {
                 type="button"
                 onClick={() => handleGenreToggle(genre.id)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  formData.selectedGenres.includes(genre.id)
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300"
-                }`}
+  formData.selectedGenres.includes(genre.id)
+    ? "bg-blue-600 text-white hover:bg-blue-700"
+    : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+}`}
+
               >
                 {genre.title}
               </button>

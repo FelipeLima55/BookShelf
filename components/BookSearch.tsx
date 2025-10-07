@@ -25,7 +25,6 @@ export default function BookSearch() {
     [searchParams]
   );
 
-  // Update URL when search term changes
   useEffect(() => {
     const queryString = createQueryString("q", debouncedSearchTerm);
     router.push(`${pathname}?${queryString}`, { scroll: false });
@@ -36,7 +35,7 @@ export default function BookSearch() {
       <div className="relative">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="absolute top-0 bottom-0 w-6 h-6 my-auto text-gray-400 left-3"
+          className="absolute top-0 bottom-0 w-6 h-6 my-auto text-gray-400 dark:text-gray-300 left-3"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -51,7 +50,7 @@ export default function BookSearch() {
         <Input
           type="text"
           placeholder="Pesquise por título, autor ou gênero..."
-          className="w-full py-3 pl-12 pr-4 text-gray-500 border rounded-md outline-none bg-gray-50 focus:bg-white focus:border-indigo-600"
+          className="w-full py-3 pl-12 pr-4 border rounded-md outline-none bg-gray-50 text-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-400 focus:bg-white dark:focus:bg-gray-700 focus:border-blue-500 dark:focus:border-blue-400 transition-colors duration-300"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           autoComplete="off"
@@ -61,7 +60,7 @@ export default function BookSearch() {
         {searchTerm && (
           <button
             onClick={() => setSearchTerm("")}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-300 hover:text-gray-600 dark:hover:text-gray-100 transition-colors"
             aria-label="Limpar pesquisa"
           >
             <svg
