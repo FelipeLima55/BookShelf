@@ -62,11 +62,13 @@ export default function BookFilters({ genres }: BookFiltersProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Filtro de Status */}
         <div>
-          <label className="block text-sm font-medium mb-2">Status</label>
+          <label className="block text-sm font-medium mb-2 text-gray-900 dark:text-gray-100">
+            Status
+          </label>
           <select
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
           >
             {statusOptions.map((option) => (
               <option key={option.value} value={option.value}>
@@ -78,11 +80,13 @@ export default function BookFilters({ genres }: BookFiltersProps) {
 
         {/* Filtro de Gênero */}
         <div>
-          <label className="block text-sm font-medium mb-2">Gênero</label>
+          <label className="block text-sm font-medium mb-2 text-gray-900 dark:text-gray-100">
+            Gênero
+          </label>
           <select
             value={selectedGenre}
             onChange={(e) => setSelectedGenre(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
           >
             <option value="">Todos os Gêneros</option>
             {genres.map((genre) => (
@@ -98,14 +102,14 @@ export default function BookFilters({ genres }: BookFiltersProps) {
       <div className="flex gap-2">
         <button
           onClick={applyFilters}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          className="px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded hover:bg-blue-700 dark:hover:bg-blue-800"
         >
           Aplicar Filtros
         </button>
         {hasFilters && (
           <button
             onClick={clearFilters}
-            className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
+            className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded hover:bg-gray-300 dark:hover:bg-gray-600"
           >
             Limpar Filtros
           </button>

@@ -163,10 +163,10 @@ export default function BookForm({ book, genres }: BookFormProps) {
 
       <form onSubmit={handleSubmit} className="space-y-6 max-w-4xl">
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 space-y-4">
-          <h2 className="text-xl font-semibold">Informações Básicas</h2>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Informações Básicas</h2>
 
           <div>
-            <label htmlFor="title" className="block text-sm font-medium mb-1">
+            <label htmlFor="title" className="block text-sm font-medium mb-1 text-gray-900 dark:text-gray-100">
               Título <span className="text-red-500">*</span>
             </label>
             <input
@@ -177,12 +177,12 @@ export default function BookForm({ book, genres }: BookFormProps) {
               onChange={handleChange}
               required
               placeholder="Ex: 1984"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
             />
           </div>
 
           <div>
-            <label htmlFor="author" className="block text-sm font-medium mb-1">
+            <label htmlFor="author" className="block text-sm font-medium mb-1 text-gray-900 dark:text-gray-100">
               Autor <span className="text-red-500">*</span>
             </label>
             <input
@@ -193,40 +193,38 @@ export default function BookForm({ book, genres }: BookFormProps) {
               onChange={handleChange}
               required
               placeholder="Ex: George Orwell"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
             />
           </div>
 
           <div>
-  <label htmlFor="status" className="block text-sm font-medium mb-1">
-    Status <span className="text-red-500">*</span>
-  </label>
-  <Select
-    name="status"
-    value={formData.status}
-    onValueChange={(value) =>
-      setFormData((prev) => ({ ...prev, status: value }))
-    }
-    required
-  >
-    <SelectTrigger className="w-full">
-      <SelectValue placeholder="Selecione o status" />
-    </SelectTrigger>
-    <SelectContent>
-      <SelectItem value="to_read">Para Ler</SelectItem>
-      <SelectItem value="reading">Lendo</SelectItem>
-      <SelectItem value="finished">Finalizado</SelectItem>
-      {/* Adicione outros status se necessário, como PAUSED, ABANDONED, etc. */}
-      <SelectItem value="read">Lido</SelectItem>
-      <SelectItem value="paused">Pausado</SelectItem>
-      <SelectItem value="abandoned">Abandonado</SelectItem>
-    </SelectContent>
-  </Select>
-</div>
-
+            <label htmlFor="status" className="block text-sm font-medium mb-1 text-gray-900 dark:text-gray-100">
+              Status <span className="text-red-500">*</span>
+            </label>
+            <Select
+              name="status"
+              value={formData.status}
+              onValueChange={(value) =>
+                setFormData((prev) => ({ ...prev, status: value }))
+              }
+              required
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Selecione o status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="to_read">Para Ler</SelectItem>
+                <SelectItem value="reading">Lendo</SelectItem>
+                <SelectItem value="finished">Finalizado</SelectItem>
+                <SelectItem value="read">Lido</SelectItem>
+                <SelectItem value="paused">Pausado</SelectItem>
+                <SelectItem value="abandoned">Abandonado</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
 
           <div>
-            <label htmlFor="isbn" className="block text-sm font-medium mb-1">
+            <label htmlFor="isbn" className="block text-sm font-medium mb-1 text-gray-900 dark:text-gray-100">
               ISBN
             </label>
             <input
@@ -236,19 +234,19 @@ export default function BookForm({ book, genres }: BookFormProps) {
               value={formData.isbn}
               onChange={handleChange}
               placeholder="Ex: 978-0451524935"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
             />
           </div>
         </div>
 
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 space-y-4">
-          <h2 className="text-xl font-semibold">Páginas e Progresso</h2>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Páginas e Progresso</h2>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label
                 htmlFor="totalPages"
-                className="block text-sm font-medium mb-1"
+                className="block text-sm font-medium mb-1 text-gray-900 dark:text-gray-100"
               >
                 Total de Páginas
               </label>
@@ -260,14 +258,14 @@ export default function BookForm({ book, genres }: BookFormProps) {
                 onChange={handleChange}
                 min="1"
                 placeholder="Ex: 328"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
               />
             </div>
 
             <div>
               <label
                 htmlFor="currentPage"
-                className="block text-sm font-medium mb-1"
+                className="block text-sm font-medium mb-1 text-gray-900 dark:text-gray-100"
               >
                 Página Atual
               </label>
@@ -279,13 +277,13 @@ export default function BookForm({ book, genres }: BookFormProps) {
                 onChange={handleChange}
                 min="0"
                 placeholder="Ex: 150"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
               />
             </div>
           </div>
 
           <div>
-            <label htmlFor="rating" className="block text-sm font-medium mb-1">
+            <label htmlFor="rating" className="block text-sm font-medium mb-1 text-gray-900 dark:text-gray-100">
               Avaliação (0-5)
             </label>
             <input
@@ -298,13 +296,13 @@ export default function BookForm({ book, genres }: BookFormProps) {
               max="5"
               step="0.1"
               placeholder="Ex: 4.5"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
             />
           </div>
         </div>
 
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 space-y-4">
-          <h2 className="text-xl font-semibold">Gêneros Literários</h2>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Gêneros Literários</h2>
           <div className="flex flex-wrap gap-2">
             {genres.map((genre) => (
               <button
@@ -312,30 +310,29 @@ export default function BookForm({ book, genres }: BookFormProps) {
                 type="button"
                 onClick={() => handleGenreToggle(genre.id)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-  formData.selectedGenres.includes(genre.id)
-    ? "bg-blue-600 text-white hover:bg-blue-700"
-    : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-}`}
-
+                  formData.selectedGenres.includes(genre.id)
+                    ? "bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800"
+                    : "bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+                }`}
               >
                 {genre.title}
               </button>
             ))}
           </div>
           {genres.length === 0 && (
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               Nenhum gênero disponível. Crie gêneros primeiro.
             </p>
           )}
         </div>
 
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 space-y-4">
-          <h2 className="text-xl font-semibold">Detalhes Adicionais</h2>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Detalhes Adicionais</h2>
 
           <div>
             <label
               htmlFor="coverUrl"
-              className="block text-sm font-medium mb-1"
+              className="block text-sm font-medium mb-1 text-gray-900 dark:text-gray-100"
             >
               URL da Capa
             </label>
@@ -346,7 +343,7 @@ export default function BookForm({ book, genres }: BookFormProps) {
               value={formData.coverUrl}
               onChange={handleChange}
               placeholder="https://exemplo.com/capa.jpg"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
             />
             {formData.coverUrl && (
               <div className="mt-2">
@@ -365,7 +362,7 @@ export default function BookForm({ book, genres }: BookFormProps) {
           <div>
             <label
               htmlFor="synopsis"
-              className="block text-sm font-medium mb-1"
+              className="block text-sm font-medium mb-1 text-gray-900 dark:text-gray-100"
             >
               Sinopse
             </label>
@@ -376,12 +373,12 @@ export default function BookForm({ book, genres }: BookFormProps) {
               onChange={handleChange}
               rows={4}
               placeholder="Descreva brevemente o livro..."
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
             />
           </div>
 
           <div>
-            <label htmlFor="notes" className="block text-sm font-medium mb-1">
+            <label htmlFor="notes" className="block text-sm font-medium mb-1 text-gray-900 dark:text-gray-100">
               Notas Pessoais
             </label>
             <textarea
@@ -391,7 +388,7 @@ export default function BookForm({ book, genres }: BookFormProps) {
               onChange={handleChange}
               rows={3}
               placeholder="Suas observações sobre o livro..."
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
             />
           </div>
         </div>
@@ -400,7 +397,7 @@ export default function BookForm({ book, genres }: BookFormProps) {
           <button
             type="submit"
             disabled={isPending}
-            className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+            className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 disabled:bg-gray-400 dark:disabled:bg-gray-600 disabled:cursor-not-allowed transition-colors"
           >
             {isPending
               ? "Salvando..."
@@ -412,7 +409,7 @@ export default function BookForm({ book, genres }: BookFormProps) {
             type="button"
             onClick={() => router.back()}
             disabled={isPending}
-            className="px-6 py-3 bg-gray-200 text-gray-700 rounded-md font-medium hover:bg-gray-300 disabled:bg-gray-100 disabled:cursor-not-allowed transition-colors dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+            className="px-6 py-3 bg-gray-200 text-gray-700 rounded-md font-medium hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 disabled:bg-gray-100 dark:disabled:bg-gray-800 disabled:cursor-not-allowed transition-colors"
           >
             Cancelar
           </button>
