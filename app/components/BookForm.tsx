@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { Book } from "@/app/types/book";
 
@@ -16,7 +16,7 @@ interface BookFormProps {
 
 export default function BookForm({ book, genres }: BookFormProps) {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const [toast, setToast] = useState<{
     show: boolean;
     message: string;
@@ -69,6 +69,9 @@ export default function BookForm({ book, genres }: BookFormProps) {
 
   const showToast = (message: string, type: "success" | "error") => {
     setToast({ show: true, message, type });
+    setTimeout(() => {
+      setToast({ show: false, message: "", type });
+    }, 3000);
   };
 
   const handleChange = (
@@ -91,14 +94,14 @@ export default function BookForm({ book, genres }: BookFormProps) {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
+  e.preventDefault();
+  
+  startTransition(async () => {
     try {
-      const payload = {
+      const payload: any = {
         title: formData.title,
         author: formData.author,
-        status: formData.status,
+        status: formData.status as any,
         totalPages: formData.totalPages ? Number(formData.totalPages) : null,
         currentPage: formData.currentPage ? Number(formData.currentPage) : null,
         rating: formData.rating ? Number(formData.rating) : null,
@@ -132,6 +135,7 @@ export default function BookForm({ book, genres }: BookFormProps) {
         router.push("/books");
         router.refresh();
       }, 1000);
+
     } catch (error) {
       console.error(error);
       showToast(
@@ -148,7 +152,7 @@ export default function BookForm({ book, genres }: BookFormProps) {
       {/* Toast Notification */}
       {toast.show && (
         <div
-          className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${
+          className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg animate-fade-in-down ${
             toast.type === "success"
               ? "bg-green-500 text-white"
               : "bg-red-500 text-white"
@@ -400,7 +404,7 @@ export default function BookForm({ book, genres }: BookFormProps) {
         <div className="flex gap-4">
           <button
             type="submit"
-            disabled={loading}
+            disabled={isPending}
             className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
           >
             {loading
@@ -412,7 +416,7 @@ export default function BookForm({ book, genres }: BookFormProps) {
           <button
             type="button"
             onClick={() => router.back()}
-            disabled={loading}
+            disabled={isPending}
             className="px-6 py-3 bg-gray-200 text-gray-700 rounded-md font-medium hover:bg-gray-300 disabled:bg-gray-100 disabled:cursor-not-allowed transition-colors dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
           >
             Cancelar
