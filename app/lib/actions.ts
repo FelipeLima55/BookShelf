@@ -5,9 +5,13 @@ import { Book } from '@/app/types/book';
 
 // Teste
 // Função auxiliar para construir URLs absolutas
-const BASE_URL = process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : 'http://localhost:3000';
+function getBaseUrl() {
+  if (typeof window !== 'undefined') return '';
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  return 'http://localhost:3000';
+}
+
+const BASE_URL = getBaseUrl();
 
     // Server action to create a new book
 export async function addBook(book: Omit<Book, 'id' | 'createdAt'>) {
