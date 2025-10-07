@@ -19,9 +19,7 @@ export default function AddBookPage() {
   const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
   const [isGenresOpen, setIsGenresOpen] = useState(false);
   const [genreSearch, setGenreSearch] = useState("");
-  const [form, setForm] = useState<
-    Partial<Omit<Book, "id" | "createdAt" | "genres">>
-  >({
+  const [form, setForm] = useState<Partial<Omit<Book, "id" | "createdAt" | "genres">>>({
     status: "TO_READ" as BookStatus,
   });
 
@@ -206,7 +204,7 @@ export default function AddBookPage() {
                   <select
                     id="status"
                     name="status"
-                    className="w-full border rounded-lg p-3 mt-2 text-base"
+                    className="w-full border border-gray-300 dark:border-gray-600 rounded-lg p-3 mt-2 text-base bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                     value={form.status || ""}
                     onChange={handleChange}
                     required
@@ -232,9 +230,9 @@ export default function AddBookPage() {
                       type="button"
                       data-genres-dropdown
                       onClick={() => setIsGenresOpen(!isGenresOpen)}
-                      className="w-full flex items-center justify-between p-3 text-left border rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full flex items-center justify-between p-3 text-left border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                     >
-                      <span className="text-sm text-gray-700">
+                      <span className="text-sm text-gray-700 dark:text-gray-100">
                         {selectedGenres.length > 0
                           ? `${selectedGenres.length} ${
                               selectedGenres.length === 1 ? "gênero" : "gêneros"
@@ -264,16 +262,16 @@ export default function AddBookPage() {
                     {isGenresOpen && (
                       <div
                         data-genres-dropdown
-                        className="absolute z-10 mt-1 w-full bg-white border rounded-lg shadow-lg"
+                        className="absolute z-10 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg"
                       >
-                        <div className="p-3 border-b">
+                        <div className="p-3 border-b border-gray-200 dark:border-gray-700">
                           <div className="relative">
                             <input
                               type="text"
                               value={genreSearch}
                               onChange={(e) => setGenreSearch(e.target.value)}
                               placeholder="Buscar gêneros..."
-                              className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                             />
                             <svg
                               className="absolute right-3 top-2.5 w-4 h-4 text-gray-400"
@@ -294,7 +292,7 @@ export default function AddBookPage() {
                         {/* Lista de Gêneros */}
                         <div className="max-h-60 overflow-y-auto p-2">
                           {filteredGenres.length === 0 ? (
-                            <div className="text-center py-4 text-gray-500">
+                            <div className="text-center py-4 text-gray-500 dark:text-gray-400">
                               Nenhum gênero encontrado
                             </div>
                           ) : (
@@ -304,15 +302,15 @@ export default function AddBookPage() {
                                 onClick={() => handleGenreChange(genre.id)}
                                 className={`flex items-center gap-2 p-2 rounded cursor-pointer ${
                                   selectedGenres.includes(genre.id)
-                                    ? "bg-blue-50 text-blue-700"
-                                    : "hover:bg-gray-50"
+                                    ? "bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-200"
+                                    : "hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100"
                                 }`}
                               >
                                 <div
                                   className={`w-4 h-4 rounded border flex items-center justify-center ${
                                     selectedGenres.includes(genre.id)
                                       ? "bg-blue-500 border-blue-500"
-                                      : "border-gray-300"
+                                      : "border-gray-300 dark:border-gray-600"
                                   }`}
                                 >
                                   {selectedGenres.includes(genre.id) && (
@@ -339,7 +337,7 @@ export default function AddBookPage() {
 
                         {/* Rodapé com Tags */}
                         {selectedGenres.length > 0 && (
-                          <div className="p-3 border-t bg-gray-50">
+                          <div className="p-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50">
                             <div className="flex flex-wrap gap-2">
                               {selectedGenres.map((genreId) => {
                                 const genre = genres.find(
@@ -349,7 +347,7 @@ export default function AddBookPage() {
                                 return (
                                   <span
                                     key={genre.id}
-                                    className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700"
+                                    className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200"
                                   >
                                     {genre.title}
                                     <button
@@ -358,7 +356,7 @@ export default function AddBookPage() {
                                         e.stopPropagation();
                                         handleGenreChange(genre.id);
                                       }}
-                                      className="hover:text-blue-900"
+                                      className="hover:text-blue-900 dark:hover:text-blue-100"
                                     >
                                       ×
                                     </button>
@@ -440,7 +438,7 @@ export default function AddBookPage() {
 
                 <div className="sm:col-span-2">
                   <Label
-                    htmlFor="isbn"
+                    htmlFor="coverUrl"
                     className="text-lg font-semibold text-gray-700"
                   >
                     URL da Imagem.
